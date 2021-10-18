@@ -5,11 +5,12 @@ include("common:implementation")
 include("common:loader:addon")
 
 fun includeImmediateChildren(dir: File, type: String) {
-    dir.walkTopDown().maxDepth(1).forEach {
+    dir.walkTopDown().maxDepth(2).forEach {
         if (!it.isDirectory || !File(it, "build.gradle.kts").exists()) return@forEach
-        val addonDir = it.relativeTo(file(".")).path.replace("/", ":")
+        val addonDir = it.relativeTo(file(".")).path.replace(Regex("(\\\\|/)"), ":")
         println("Including $type directory \"$addonDir\" as subproject.")
-        include(addonDir)
+        include(addonDir);
+    
     }
 }
 
